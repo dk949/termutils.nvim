@@ -34,6 +34,14 @@ function M.smartClose()
     end
 end
 
+function M.saveMode()
+    vim.b.term_utils_last_mode = vim.fn.mode()
+end
+
+function M.getMode()
+    return vim.b.term_utils_last_mode
+end
+
 function M.setup(options)
     _G.termutils = { termWindow = {} }
     M._opts = defaults.extend(options)
