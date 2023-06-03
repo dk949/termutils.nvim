@@ -14,6 +14,19 @@ function M.rememberWindow()
             table.insert(_G.termutils.termWindow, vim.fn.winnr())
         end
     })
+
+    vim.api.nvim_create_autocmd("TermClose", {
+        pattern = "*",
+        callback = function()
+            local winnr = vim.fn.winnr()
+            for i, win in ipairs(_G.termutils.termWindow) do
+                if win == winnr then
+                    table.remove(_G.termutils.termWindow, i)
+                    break
+                end
+            end
+        end
+    })
 end
 
 function M.startinsert()
