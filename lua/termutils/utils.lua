@@ -1,5 +1,19 @@
 local M = {}
 
+function M.addCurrentWin()
+    table.insert(_G.termutils.termWindow, vim.fn.winnr())
+end
+
+function M.removeCurrentWin()
+    local winnr = vim.fn.winnr()
+    for i, win in ipairs(_G.termutils.termWindow) do
+        if win == winnr then
+            table.remove(_G.termutils.termWindow, i)
+            break
+        end
+    end
+end
+
 function M.removeNumbers()
     vim.api.nvim_create_autocmd("TermOpen", {
         pattern = "*",
@@ -10,22 +24,12 @@ end
 function M.rememberWindow()
     vim.api.nvim_create_autocmd("TermOpen", {
         pattern = "*",
-        callback = function()
-            table.insert(_G.termutils.termWindow, vim.fn.winnr())
-        end
+        callback = M.addCurrentWin,
     })
 
     vim.api.nvim_create_autocmd("TermClose", {
         pattern = "*",
-        callback = function()
-            local winnr = vim.fn.winnr()
-            for i, win in ipairs(_G.termutils.termWindow) do
-                if win == winnr then
-                    table.remove(_G.termutils.termWindow, i)
-                    break
-                end
-            end
-        end
+        callback = M.removeCurrentWin,
     })
 end
 
