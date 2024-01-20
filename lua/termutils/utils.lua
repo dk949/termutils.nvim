@@ -52,8 +52,20 @@ end
 
 function M.filterBufsByType(type, bufs)
     return vim.tbl_filter(function(buf)
-        return vim.fn.bufexists(buf) and vim.fn.getbufvar(buf, '&buftype', nil) == type
+        if not vim.fn.bufexists(buf) then return false end
+        return vim.fn.getbufvar(buf, '&buftype', nil) == type
     end, bufs)
+end
+
+---@param opt? table
+---@param name string
+---@param default any
+---@return any
+function M.getOpt(opt, name, default)
+    if opt ~= nil and opt[name] ~= nil then
+        return opt[name]
+    end
+    return default
 end
 
 return M
