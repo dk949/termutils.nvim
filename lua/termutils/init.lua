@@ -50,13 +50,9 @@ end
 --- If `buffer_close_fn` is in `opts`, `smartClose` it will be used to close the
 --- buffer spawned from the terminal. `buffer_close_fn` takes an optional
 --- integer indicating which buffer needs closing, if it's nil, close current buffer.
---- Default close is `:bw`.
+--- Default close is write (if modifiable) then `:bw`.
 ---
---- `opts` can also have a `auto_save` field. Default true (save before closing
----  anything other than a terminal).
----
---- NOTE: By default only the terminal is closed with `!`, so even if
----       `auto_save` is `false`, work won't be lost.
+--- NOTE: By default only the terminal is closed with `!`, so ` work shouldn't be lost.
 ---
 ---@param opts? table
 ---@return unknown|nil
