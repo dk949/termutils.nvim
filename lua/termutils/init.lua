@@ -104,17 +104,17 @@ function M.smartClose(opts)
         end)()
 
         local function default_exit(b)
-            if vim.bo[b].modifiable then
-                local alt = utils.saveAlternative()
-                local current = vim.fn.bufnr()
-                vim.cmd (tostring(b) .. "bufdo w")
-                vim.cmd("buffer " .. tostring(current))
-                utils.restoreAlternative(alt)
-            end
             if b ~= nil then
+                if vim.bo[b].modifiable then
+                    local alt = utils.saveAlternative()
+                    local current = vim.fn.bufnr()
+                    vim.cmd (tostring(b) .. "bufdo w")
+                    vim.cmd("buffer " .. tostring(current))
+                    utils.restoreAlternative(alt)
+                end
                 vim.cmd("bw " .. tostring(b))
             else
-                vim.cmd [[:bw]]
+                vim.cmd [[:w|bw]]
             end
         end
 
