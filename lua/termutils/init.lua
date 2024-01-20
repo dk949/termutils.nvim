@@ -42,7 +42,7 @@ end
 --- it needs to exit nvim. By default it uses `ZZ`
 ---
 ---@generic T
----@param close_fn function (): `T`
+---@param close_fn? function (): `T`
 ---@return `T`|nil
 function M.smartClose(close_fn)
     ---@diagnostic disable-next-line: param-type-mismatch
@@ -54,14 +54,18 @@ function M.smartClose(close_fn)
         local this_bufnr = vim.fn.bufnr()
         local buf = (function()
             -- if there are is a terminal buffers to fall back, use it
-            if (terminals ~= nil and #terminals ~= 0) then return terminals[1] end
+            if (terminals ~= nil and #terminals ~= 0 and vim.fn.bufexists(terminals[1])) then
+                return terminals[1]
+            end
 
             -- otherwise pick something sensible
 
             -- alternative buffer?
             do
                 local buf = vim.fn.bufnr('#') ---@diagnostic disable-line: param-type-mismatch
-                if buf ~= -1 then return buf end
+                if buf ~= -1 and vim.fn.bufexists(buf) then
+                    return buf
+                end
             end
 
             -- last buffer?
