@@ -67,7 +67,7 @@ function M.smartClose(close_fn)
             -- last buffer?
             ---@diagnostic disable-next-line: param-type-mismatch
             for buf = vim.fn.bufnr('$'), 0, -1 do
-                if buf ~= this_bufnr and vim.fn.bufexists(buf) ~= -1 then
+                if buf ~= this_bufnr and vim.fn.bufexists(buf) then
                     return buf
                 end
             end
