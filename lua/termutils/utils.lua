@@ -73,7 +73,7 @@ function M.saveAlternative()
 end
 
 function M.restoreAlternative(alt)
-    vim.fn.setreg('#',alt)
+    if alt ~= nil and alt ~= "" then vim.fn.setreg('#',alt) end
 end
 
 return M
