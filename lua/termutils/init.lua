@@ -80,6 +80,7 @@ function M.smartClose(close_fn)
             return
         end
     end
+    if close_fn then return close_fn() end
     vim.api.nvim_feedkeys("ZZ", 'n', false)
 end
 
