@@ -41,11 +41,27 @@ end
 --- If `close_fn` is provided, `smartClose` will call and return it's value if
 --- it needs to exit nvim. By default it uses `ZZ`
 ---
----@generic T
----@param close_fn? function (): `T`
----@return `T`|nil
-function M.smartClose(close_fn)
-    ---@diagnostic disable-next-line: param-type-mismatch
+--- If the current buffer _is_ a terminal, closes the terminal and return to the
+--- last buffer in jump list. Use the `terminal_close_fn` from `opts` and returns
+--- it's value. If not provided, terminal is closed with `:bw!`.
+---
+--- If `editor_close_fn` is provided in `opts`, `smartClose` will call and
+--- return it's value if it needs to exit nvim. By default it uses `:q`.
+---
+--- If `buffer_close_fn` is in `opts`, `smartClose` it will be used to close the
+--- buffer spawned from the terminal. `buffer_close_fn` takes an optional
+--- integer indicating which buffer needs closing, if it's nil, close current buffer.
+--- Default close is `:bw`.
+---
+--- `opts` can also have a `auto_save` field. Default true (save before closing
+---  anything other than a terminal).
+---
+--- NOTE: By default only the terminal is closed with `!`, so even if
+---       `auto_save` is `false`, work won't be lost.
+---
+---@param opts? table
+---@return unknown|nil
+function M.smartClose(opts)
     assert(M._opts.smartClose, "Cannot call termutils.smartClose if smartClose option is set to false in setup")
     local winnr = vim.fn.winnr()
 
