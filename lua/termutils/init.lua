@@ -52,4 +52,28 @@ function M.setup(options)
     if M._opts.smartClose then utils.rememberWindow() end
 end
 
+--- Register current window as a terminal window
+---
+--- NOTE: These are advanced functions for directly manipulating termutils state.
+---       You shouldn't need to call them under normal circumstances.
+---
+--- When opening a terminal, the window will be registered automatically,
+--- _unless_ TermOpen event does not fire. This can happen if `:term`
+--- immediatley runs a command which opens a new nvim instance via nvr.
+--- In that case, run this command before `:term` and `removeCurrentWin` after.
+---
+--- @see termutils.removeCurrentWin
+function M.addCurrentWin()
+    return utils.addCurrentWin()
+end
+
+--- Unregister current window as a terminal window
+---
+--- NOTE: This is a no-op if the current window is not registered
+---
+--- @see termutils.addCurrentWin()
+function M.removeCurrentWin()
+    return utils.removeCurrentWin()
+end
+
 return M
