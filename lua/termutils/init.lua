@@ -146,8 +146,8 @@ function M.setup(options)
     _G.termutils = {
         version = {
             major = 1,
-            minor = 4,
-            patch = 1,
+            minor = 6,
+            patch = 0,
         },
         termWindow = {}
     }
