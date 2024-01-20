@@ -62,16 +62,13 @@ end
 ---@return unknown|nil
 function M.smartClose(opts)
     assert(M._opts.smartClose, "Cannot call termutils.smartClose if smartClose option is set to false in setup")
-    local winnr = vim.fn.winnr()
 
     if vim.bo.buftype == "terminal" then
         return utils.getOpt(opts, 'terminal_close_fn', function()
             vim.cmd [[:bw!]]
         end)()
     end
-    if utils.getOpt(opts, 'auto_save', true) then
-        vim.cmd [[:w]]
-    end
+    local winnr = vim.fn.winnr()
     if vim.tbl_contains(_G.termutils.termWindow, winnr) then
         local terminals = utils.filterBufsByType("terminal", utils.allBufs())
         local this_bufnr = vim.fn.bufnr()
