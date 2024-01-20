@@ -45,7 +45,7 @@ end
 --- it's value. If not provided, terminal is closed with `:bw!`.
 ---
 --- If `editor_close_fn` is provided in `opts`, `smartClose` will call and
---- return it's value if it needs to exit nvim. By default it uses `:q`.
+--- return it's value if it needs to exit nvim. By default it uses `:x`.
 ---
 --- If `buffer_close_fn` is in `opts`, `smartClose` it will be used to close the
 --- buffer spawned from the terminal. `buffer_close_fn` takes an optional
