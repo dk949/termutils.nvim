@@ -97,7 +97,7 @@ function M.smartClose(close_fn)
 
         -- we found the buffer to go back to and the current buffer is valid
         -- so we go to the target buffer and close the old one (bwipe it, because we've "closed" that instance)
-        if buf ~= -1 and vim.fn.bufexists(this_bufnr) then
+        if buf ~= -1 and vim.fn.bufexists(buf) and vim.fn.bufexists(this_bufnr) then
             vim.cmd("buffer " .. tostring(buf))
             return utils.getOpt(opts, 'buffer_close_fn', default_exit)(this_bufnr)
         else
