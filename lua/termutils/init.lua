@@ -128,7 +128,9 @@ function M.smartClose(opts)
         end
     end
 
-    return utils.getOpt(opts, 'editor_close_fn', function() vim.cmd [[:q]] end)()
+    return utils.getOpt(opts, 'editor_close_fn', function()
+        vim.cmd [[:x]]
+    end)()
 end
 
 function M.saveMode()
