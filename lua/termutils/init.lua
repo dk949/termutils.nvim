@@ -42,6 +42,8 @@ function M.getMode()
     return vim.b.term_utils_last_mode
 end
 
+--- Set up termutils
+--- This function has to be called before any other functions can be used.
 function M.setup(options)
     _G.termutils = { termWindow = {} }
     M._opts = defaults.extend(options)
