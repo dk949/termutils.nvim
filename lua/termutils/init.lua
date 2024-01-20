@@ -45,7 +45,14 @@ end
 --- Set up termutils
 --- This function has to be called before any other functions can be used.
 function M.setup(options)
-    _G.termutils = { termWindow = {} }
+    _G.termutils = {
+        version = {
+            major = 1,
+            minor = 4,
+            pathc = 0,
+        },
+        termWindow = {}
+    }
     M._opts = defaults.extend(options)
     if M._opts.removeNumbers then utils.removeNumbers() end
     if M._opts.startinsert then utils.startinsert() end
