@@ -49,7 +49,15 @@ function M.smartClose(close_fn)
     assert(M._opts.smartClose, "Cannot call termutils.smartClose if smartClose option is set to false in setup")
     local winnr = vim.fn.winnr()
 
-    if vim.bo.buftype ~= "terminal" and vim.tbl_contains(_G.termutils.termWindow, winnr) then
+    if vim.bo.buftype == "terminal" then
+        return utils.getOpt(opts, 'terminal_close_fn', function()
+            vim.cmd [[:bw!]]
+        end)()
+    end
+    if utils.getOpt(opts, 'auto_save', true) then
+        vim.cmd [[:w]]
+    end
+    if vim.tbl_contains(_G.termutils.termWindow, winnr) then
         local terminals = utils.filterBufsByType("terminal", utils.allBufs())
         local this_bufnr = vim.fn.bufnr()
         local buf = (function()
@@ -78,14 +86,26 @@ function M.smartClose(close_fn)
             -- the nvr buffer we're about to close is the last buffer there is, so just close nvim
             return -1
         end)()
-        if buf ~= -1 then
+
+        local function default_exit(b)
+            if b ~= nil then
+                vim.cmd("bw " .. tostring(b))
+            else
+                vim.cmd [[:bw]]
+            end
+        end
+
+        -- we found the buffer to go back to and the current buffer is valid
+        -- so we go to the target buffer and close the old one (bwipe it, because we've "closed" that instance)
+        if buf ~= -1 and vim.fn.bufexists(this_bufnr) then
             vim.cmd("buffer " .. tostring(buf))
-            vim.cmd("bdelete " .. tostring(this_bufnr))
-            return
+            return utils.getOpt(opts, 'buffer_close_fn', default_exit)(this_bufnr)
+        else
+            return utils.getOpt(opts, 'buffer_close_fn', default_exit)()
         end
     end
-    if close_fn then return close_fn() end
-    vim.api.nvim_feedkeys("ZZ", 'n', false)
+
+    return utils.getOpt(opts, 'editor_close_fn', function() vim.cmd [[:q]] end)()
 end
 
 function M.saveMode()
