@@ -31,12 +31,12 @@ function M.startTerminal(orientation)
     if M._opts.startinsert then vim.cmd [[startinsert]] end
 end
 
---- If the current buffer was opened on the same window as a terminal, return to
---- that terminal, otherwise close nvim.
+--- If the current buffer was opened on the same window as a terminal, wipe the
+--- buffer and return to that terminal, otherwise close the window.
 ---
 --- If the terminal no longer exists, return to the alternative buffer
 --- If no alternative buffer exists, return to the last created buffer
---- If no more buffers are available, close nvim.
+--- If no more buffers are available, just close the window.
 ---
 --- Various options can be provided via the `opts` table (which is itself optional)
 ---
@@ -44,8 +44,8 @@ end
 --- last buffer in jump list. Use the `terminal_close_fn` from `opts` and returns
 --- it's value. If not provided, terminal is closed with `:bw!`.
 ---
---- If `editor_close_fn` is provided in `opts`, `smartClose` will call and
---- return it's value if it needs to exit nvim. By default it uses `:x`.
+--- If `window_close_fn` is provided in `opts`, `smartClose` will call and
+--- return it's value if it needs to close the window. By default it uses `:x`.
 ---
 --- If `buffer_close_fn` is in `opts`, `smartClose` it will be used to close the
 --- buffer spawned from the terminal. `buffer_close_fn` takes an optional
@@ -120,7 +120,7 @@ function M.smartClose(opts)
         end
     end
 
-    return utils.getOpt(opts, 'editor_close_fn', function()
+    return utils.getOpt(opts, 'window_close_fn', function()
         vim.cmd [[:x]]
     end)()
 end
