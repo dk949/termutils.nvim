@@ -32,14 +32,13 @@ function M.startTerminal(orientation)
 end
 
 --- If the current buffer was opened on the same window as a terminal, return to
---- that terminal, otherwise close nvim
+--- that terminal, otherwise close nvim.
 ---
 --- If the terminal no longer exists, return to the alternative buffer
 --- If no alternative buffer exists, return to the last created buffer
 --- If no more buffers are available, close nvim.
 ---
---- If `close_fn` is provided, `smartClose` will call and return it's value if
---- it needs to exit nvim. By default it uses `ZZ`
+--- Various options can be provided via the `opts` table (which is itself optional)
 ---
 --- If the current buffer _is_ a terminal, closes the terminal and return to the
 --- last buffer in jump list. Use the `terminal_close_fn` from `opts` and returns
