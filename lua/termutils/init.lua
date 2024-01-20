@@ -67,7 +67,9 @@ function M.smartClose(close_fn)
             -- last buffer?
             ---@diagnostic disable-next-line: param-type-mismatch
             for buf = vim.fn.bufnr('$'), 0, -1 do
-                if buf ~= this_bufnr then return buf end
+                if buf ~= this_bufnr and vim.fn.bufexists(buf) ~= -1 then
+                    return buf
+                end
             end
             -- the nvr buffer we're about to close is the last buffer there is, so just close nvim
             return -1
