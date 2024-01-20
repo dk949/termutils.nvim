@@ -25,13 +25,34 @@ function M.smartClose()
 
     if vim.bo.buftype ~= "terminal" and vim.tbl_contains(_G.termutils.termWindow, winnr) then
         local terminals = utils.filterBufsByType("terminal", utils.allBufs())
-        assert(terminals ~= nil and #terminals ~= 0, "Terminals is empty")
-        local bufnr = vim.fn.bufnr()
-        vim.cmd("buffer " .. tostring(terminals[1]))
-        vim.cmd("bdelete " .. tostring(bufnr))
-    else
-        vim.api.nvim_feedkeys("ZZ", 'n', false)
+        local this_bufnr = vim.fn.bufnr()
+        local buf = (function()
+            -- if there are is a terminal buffers to fall back, use it
+            if (terminals ~= nil and #terminals ~= 0) then return terminals[1] end
+
+            -- otherwise pick something sensible
+
+            -- alternative buffer?
+            do
+                local buf = vim.fn.bufnr('#') ---@diagnostic disable-line: param-type-mismatch
+                if buf ~= -1 then return buf end
+            end
+
+            -- last buffer?
+            ---@diagnostic disable-next-line: param-type-mismatch
+            for buf = vim.fn.bufnr('$'), 0, -1 do
+                if buf ~= this_bufnr then return buf end
+            end
+            -- the nvr buffer we're about to close is the last buffer there is
+            return -1
+        end)()
+        if buf ~= -1 then
+            vim.cmd("buffer " .. tostring(buf))
+            vim.cmd("bdelete " .. tostring(this_bufnr))
+            return
+        end
     end
+    vim.api.nvim_feedkeys("ZZ", 'n', false)
 end
 
 function M.saveMode()
@@ -49,7 +70,7 @@ function M.setup(options)
         version = {
             major = 1,
             minor = 4,
-            pathc = 0,
+            patch = 1,
         },
         termWindow = {}
     }
