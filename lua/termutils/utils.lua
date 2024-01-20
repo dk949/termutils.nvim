@@ -68,4 +68,12 @@ function M.getOpt(opt, name, default)
     return default
 end
 
+function M.saveAlternative()
+    return vim.fn.getreg('#')
+end
+
+function M.restoreAlternative(alt)
+    vim.fn.setreg('#',alt)
+end
+
 return M
