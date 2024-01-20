@@ -52,7 +52,7 @@ end
 
 function M.filterBufsByType(type, bufs)
     return vim.tbl_filter(function(buf)
-        return vim.fn.bufexists(buf) and vim.bo[buf].buftype == type
+        return vim.fn.bufexists(buf) and vim.fn.getbufvar(buf, '&buftype', nil) == type
     end, bufs)
 end
 
