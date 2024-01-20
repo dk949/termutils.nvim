@@ -104,6 +104,7 @@ function M.smartClose(opts)
         end)()
 
         local function default_exit(b)
+            if vim.bo[b].modifiable then vim.cmd [[:w]] end
             if b ~= nil then
                 vim.cmd("bw " .. tostring(b))
             else
