@@ -37,7 +37,14 @@ end
 --- If the terminal no longer exists, return to the alternative buffer
 --- If no alternative buffer exists, return to the last created buffer
 --- If no more buffers are available, close nvim.
-function M.smartClose()
+---
+--- If `close_fn` is provided, `smartClose` will call and return it's value if
+--- it needs to exit nvim. By default it uses `ZZ`
+---
+---@generic T
+---@param close_fn function (): `T`
+---@return `T`|nil
+function M.smartClose(close_fn)
     ---@diagnostic disable-next-line: param-type-mismatch
     assert(M._opts.smartClose, "Cannot call termutils.smartClose if smartClose option is set to false in setup")
     local winnr = vim.fn.winnr()
